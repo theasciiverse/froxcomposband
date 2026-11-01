@@ -1,0 +1,46 @@
+# System packages (.deb, .rpm, .apk, Arch) for FroxComposband's terminal
+# version, built by nfpm from the same static Linux build as the av
+# archive. The release workflow sets VERSION, RELEASE (our packaging
+# release) and ARCH (amd64 or arm64).
+#
+# /usr/bin/froxcomposband is the start script (asciiverse/froxcomposband):
+# it runs the binary from /usr/lib/froxcomposband, next to the lib/ folder
+# it reads its data from. Saves go to ~/.local/share/FroxComposband.
+#
+# No .desktop file on purpose: av is the one place titles are started from,
+# so Asciiverse packages never add menu entries (asciiverse/CLAUDE.md).
+name: froxcomposband
+arch: ${ARCH}
+platform: linux
+version: ${VERSION}
+release: ${RELEASE}
+section: games
+priority: optional
+maintainer: Asciiverse <packages@asciiverse.sh>
+vendor: Asciiverse
+homepage: https://github.com/theasciiverse/froxcomposband
+license: LicenseRef-Free-Noncommercial
+description: |
+  An Angband variant with a huge cast of races, classes and monsters.
+  The maintained fork of FrogComposband (by way of PosChengband, Hengband
+  and Zangband), with many fixes; loads FrogComposband saves. This is the
+  terminal version, FroxComposband by Gliktch, packaged by Asciiverse.
+contents:
+  - src: asciiverse/froxcomposband
+    dst: /usr/bin/froxcomposband
+    file_info: { mode: 0755 }
+  - src: src/froxcomposband
+    dst: /usr/lib/froxcomposband/froxcomposband
+    file_info: { mode: 0755 }
+  - src: stage/game/lib
+    dst: /usr/lib/froxcomposband/lib
+    type: tree
+  - src: asciiverse/COPYING
+    dst: /usr/share/doc/froxcomposband/copyright
+    file_info: { mode: 0644 }
+  - src: README.md
+    dst: /usr/share/doc/froxcomposband/README.md
+    file_info: { mode: 0644 }
+  - src: PATCHES.md
+    dst: /usr/share/doc/froxcomposband/PATCHES.md
+    file_info: { mode: 0644 }

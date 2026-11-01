@@ -1,0 +1,7 @@
+#!/bin/sh
+# Stands in for ncursesw6-config on macOS, which has the library (wide
+# characters included) but no config script; see asciiverse/build.sh.
+case "$*" in
+  *--cflags*) echo "-D_XOPEN_SOURCE_EXTENDED" ;;
+  *--libs*) echo "-lncurses" ;;
+esac

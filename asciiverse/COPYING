@@ -1,0 +1,13 @@
+FroxComposband has no licence file of its own. Like the Hengband, Zangband
+and PosChengband code it grows from, its sources carry the Moria/Angband
+notice below (src/angband.h and most other files), which this package
+follows: free to copy and share, never for profit.
+
+    Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
+
+    This software may be copied and distributed for educational, research,
+    and not for profit purposes provided that this copyright and statement
+    are included in all such copies.
+
+A few files carry other terms of their own (for example src/randname.c,
+GPL); see the head of each source file.

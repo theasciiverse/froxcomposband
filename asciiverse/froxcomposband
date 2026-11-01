@@ -1,0 +1,16 @@
+#!/bin/sh
+# Starts FroxComposband from an av install or a system package. The game
+# finds its data in ./lib, so this runs it from the folder that holds lib/;
+# saves, scores and its data cache go to ${XDG_DATA_HOME:-~/.local/share}/
+# FroxComposband (built with USE_PRIVATE_PATHS, see asciiverse/build.sh).
+# av links ~/.local/bin/froxcomposband to this file, so follow that link.
+set -e
+self=$(readlink "$0" 2>/dev/null || printf '%s' "$0")
+dir=$(cd "$(dirname "$self")" && pwd)
+if [ -x "$dir/game/froxcomposband" ]; then
+  game="$dir/game"                       # av archive
+else
+  game=/usr/lib/froxcomposband           # .deb etc.
+fi
+cd "$game"
+exec ./froxcomposband "$@"
