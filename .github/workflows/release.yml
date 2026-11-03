@@ -11,8 +11,10 @@
 #
 # Tags look like v7.3.2-av.1: upstream's version, then our packaging release.
 # Linux builds are fully static (Alpine); macOS builds run natively on a
-# runner of each architecture (the build runs the game once to generate its
-# help) against the system's ncurses. No Windows build yet.
+# runner of each architecture against the system's ncurses. The help pages
+# a first run of the game generates are made once by the x86_64 Linux build
+# and handed to the macOS builds, as upstream's own release workflow does.
+# No Windows build yet.
 
 name: release
 
@@ -52,6 +54,16 @@ jobs:
           sudo chown -R "$(id -u):$(id -g)" .
           file src/froxcomposband
 
+      - name: Export generated help
+        if: matrix.arch == 'amd64'
+        run: bash -c 'source scripts/release/common.sh && copy_generated_help_export "$RUNNER_TEMP/help"'
+
+      - uses: actions/upload-artifact@v4
+        if: matrix.arch == 'amd64'
+        with:
+          name: help
+          path: ${{ runner.temp }}/help
+
       - name: Package for av
         run: |
           sh asciiverse/stage.sh
@@ -74,6 +86,7 @@ jobs:
           path: dist/*
 
   macos:
+    needs: linux
     strategy:
       fail-fast: false
       matrix:
@@ -88,9 +101,14 @@ jobs:
         with:
           ref: ${{ env.TAG }}
 
+      - uses: actions/download-artifact@v4
+        with:
+          name: help
+          path: ${{ runner.temp }}/help
+
       - name: Build
         run: |
-          sh asciiverse/build.sh
+          HELP_FROM="$RUNNER_TEMP/help" sh asciiverse/build.sh
           file src/froxcomposband
           otool -L src/froxcomposband
 
@@ -112,6 +130,7 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           path: dist
+          pattern: "*-*-*"
           merge-multiple: true
 
       - name: Checksums

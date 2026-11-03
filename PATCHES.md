@@ -24,6 +24,10 @@ saves, scores, bones and its data cache in
 `${XDG_DATA_HOME:-~/.local/share}/FroxComposband`, upstream's own
 per-user folder. Then, as upstream's release does, a first run generates
 the class, race and monster help pages (`scripts/release/generate-help.sh`).
+That run happens once, in the x86_64 Linux build; the macOS builds take
+its pages (`HELP_FROM`, `scripts/release/apply-generated-help.sh`), as
+upstream's release workflow does. The helper script runs the game under
+`timeout`, which macOS runners lack, so a run there made no pages.
 
 ## Packaging
 
